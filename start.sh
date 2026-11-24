@@ -8,10 +8,10 @@ mkdir -p data/kafka
 # start redis in the background on the port the consumer uses
 redis-server --port 6379 --daemonize yes
 
-# set up kafka to store its data in data/kafka, and start it
+# set up kafka on port 9092 to store its data in data/kafka, and start it
 sed "s|^log.dirs=.*|log.dirs=$PWD/data/kafka|" $KAFKA/config/server.properties > data/kafka.properties
 [ -f data/kafka/meta.properties ] || $KAFKA/bin/kafka-storage.sh format --standalone -t "$($KAFKA/bin/kafka-storage.sh random-uuid)" -c data/kafka.properties
-$KAFKA/bin/kafka-server-start.sh -daemon data/kafka.properties
+LOG_DIR=$PWD/data/kafka-logs $KAFKA/bin/kafka-server-start.sh -daemon data/kafka.properties
 until $KAFKA/bin/kafka-topics.sh --list --bootstrap-server localhost:9092 > /dev/null 2>&1; do sleep 1; done
 
 # create the clicks topic with the partitions from .env

@@ -20,7 +20,6 @@ import java.util.UUID;
 
 public class Consumer {
 
-    @SuppressWarnings("resource")
     public static void main(String[] args) throws Exception {
         int myPartition = Integer.parseInt(args[0]);
         String heartbeatKey = "heartbeat:" + myPartition;
@@ -96,6 +95,10 @@ public class Consumer {
                     local bookmarkKey = KEYS[2]
                     local workerId = ARGV[1]
                     local bookmark = ARGV[2]
+                    local batch = {}
+                    for i = 3, #ARGV do
+                        table.insert(batch, ARGV[i])
+                    end
 
                     if redis.call('GET', lease) ~= workerId then
                         return 0
@@ -103,23 +106,16 @@ public class Consumer {
 
                     redis.call('SET', bookmarkKey, bookmark)
 
-                    for i = 3, #ARGV, 3 do
-                        local minute = ARGV[i]
-                        local video = ARGV[i + 1]
-                        local count = ARGV[i + 2]
+                    for i = 1, #batch, 3 do
+                        local minute = batch[i]
+                        local video = batch[i + 1]
+                        local count = batch[i + 2]
                         redis.call('ZINCRBY', minute, count, video)
                         redis.call('EXPIRE', minute, 3600, 'NX')
-
-                        local sketch = 'cms:' .. minute
-                        if redis.call('EXISTS', sketch) == 0 then
-                            redis.call('CMS.INITBYDIM', sketch, 2000, 5)
-                            redis.call('EXPIRE', sketch, 3600)
-                        end
-                        redis.call('CMS.INCRBY', sketch, video, count)
                     end
 
                     return 1
-                    """;
+                """;
 
                 Object result = batchJob.eval(script, List.of(heartbeatKey, bookmarkKey), batch);
                 // if you're a zombie, restart

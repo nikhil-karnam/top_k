@@ -1,13 +1,8 @@
 #!/bin/bash
-KAFKA=~/kafka_2.13-4.3.1
 
-# stop all the workers
+# stop the workers, kafka and redis for the exact system
 pkill -f com.helloworld.Consumer
-
-# stop kafka
-$KAFKA/bin/kafka-server-stop.sh
-
-# stop redis
+pkill -f data/kafka.properties
 redis-cli -p 6379 shutdown
 
 echo "stop done!"
