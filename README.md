@@ -25,4 +25,4 @@ Requires Java 21, Maven, Redis 8+, and Kafka 4.3.1 with its path set in `.env`.
 
 Froze every main worker mid-stream: the backups took over, the old mains unfroze and ended up restarted themselves, and the counts came out exact.
 
-Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 clicks, 300 clicks, ... 1000 clicks: count-min achieved 93.4% accuracy for the top 10 videos for the last hour (1 - total extra clicks / total clicks), 97.9% less memory for the whole minute, and perfect top-10 ranking.
+Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 clicks, 300 clicks, ... 1000 clicks: count-min achieved 93.4% accuracy for the top 10 videos (1 - total extra clicks / total clicks), 97.9% less memory for the whole minute, and perfect top-10 ranking.
