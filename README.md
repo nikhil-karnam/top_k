@@ -1,5 +1,3 @@
-# top_k
-
 Real-time, exactly-once, top-k clicked videos over the last hour (rolling window), using Kafka and Redis.
 
 ## How it works
