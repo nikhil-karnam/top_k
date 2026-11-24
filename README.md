@@ -7,8 +7,8 @@ Real-time, exact, exactly-once, top-k clicked videos over the last hour (rolling
 - Every 10 seconds, the worker reads the partition, aggregates clicks, sends a batch to Redis, and resets its click counter.
 - Kafka offset positions are saved in Redis at the same time that a batch is saved. When a worker dies, the backup worker reads the offset in Redis to know where to pick back up in Kafka. If the offset isn't saved in Redis, it cannot be updated at the same time that the batch is saved. So a worker may die after a batch is saved but before updating the offset, and this can cause a newly started worker to repeat the clicks that the old one already put into Redis. Saving it in Redis therefore prevents double counting.
 - Before a batch is written, the lease in Redis is checked to determine if another worker has claimed your partition. If so, it means your worker is a zombie and the batch is rejected to avoid double counting clicks. This all happens through a Lua script. Then the zombie is made to restart.
-- In Redis, each key is a minute and the value contains a sorted set with video ID and count for that minute. The minute key expires after an hour of initially being set.
 - Each batch contains minute-videoID buckets because if minutes weren't considered, a lagging partition may add its clicks to the latest Redis minute, even though it is older. This keeps the counts exact to the minute it was clicked.
+- In Redis, each key is a minute and the value contains a sorted set with video ID and count for that minute. The minute key expires after an hour of initially being set.
 - `Stats` aggregates the keys and values of the last 60 minutes and prints the top-k.
 - For the count-min version, Redis goes through a batch's buckets and for each one, adds it to the sketch, retrieves the count estimate, adds it to a separate top-100 sorted set for that minute, and evicts video #101. Calculating the top-k aggregates these sorted sets.
 
