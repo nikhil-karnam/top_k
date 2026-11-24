@@ -16,11 +16,7 @@ Real-time top K most-clicked videos over the last hour, using Kafka and Redis, w
 
 Requires Java 21, Maven, Redis 7+, and Kafka 4.3.1 installed in `~/kafka_2.13-4.3.1`.
 
-```
-./start.sh
-java -cp "target/classes:$(cat data/classpath.txt)" com.helloworld.Stats
-./stop.sh
-```
+`bash start.sh` to start, `java -cp "target/classes:$(cat data/classpath.txt)" com.helloworld.Stats` to report top-k, and `bash stop.sh` to stop. Folders are not deleted after stopping.
 
 ## Tested
 
