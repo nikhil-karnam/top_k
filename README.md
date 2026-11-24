@@ -27,4 +27,4 @@ Froze every main worker mid-stream: the backups took over, the old mains unfroze
 
 Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 clicks, 300 clicks, ... 1000 clicks: count-min achieved 93.4% accuracy for the top 10 videos (1 - total extra clicks / total clicks), 97.9% less memory for the whole minute, and perfect top-10 ranking.
 
-Batching got through about 124,000 clicks per second versus 6,500 for one write per click = ~19x faster.
+Batching got through an average of 124,397 clicks per second versus 6,489 for one write per click = ~19x faster.
