@@ -4,7 +4,7 @@ Real-time top K most-clicked videos over the last hour, using Kafka and Redis, w
 
 ## How it works
 
-- Clicks go into a Kafka topic split into partitions (set in `.env`).
+- Clicks go into a Kafka topic split into partitions (number is set in `.env`).
 - Each partition has a main worker and a backup. The workers race to claim the partition, and whoever wins claims a lease in Redis for the partition (distributed lock).
 - Every 10 seconds, the worker reads the partition, aggregates clicks, sends a batch to Redis, and resets its click counter.
 - Kafka offset positions are saved in Redis at the same time that a batch is saved. When a worker dies, the backup worker reads the offset in Redis to know where to pick back up in Kafka. If the offset isn't saved in Redis, it cannot be updated at the same time that the batch is saved. So a worker may die after a batch is saved but before updating the offset, and this can cause a newly started worker to repeat the clicks that the old one already put into Redis. Saving it in Redis therefore prevents double counting.
@@ -14,7 +14,7 @@ Real-time top K most-clicked videos over the last hour, using Kafka and Redis, w
 
 ## Run
 
-Requires Java 21, Maven, Redis 7+, and Kafka 4.3.1 at `~/kafka_2.13-4.3.1`.
+Requires Java 21, Maven, Redis 7+, and Kafka 4.3.1 installed in `~/kafka_2.13-4.3.1`.
 
 ```
 ./start.sh
