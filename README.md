@@ -1,4 +1,4 @@
-Real-time, exact, exactly-once, top-k clicked videos over the last hour (rolling window), using Kafka and Redis.
+Real-time, exact, exactly-once, fault-tolerant, top-k clicked videos over the last hour (rolling window), using Kafka and Redis.
 
 ## How it works
 
