@@ -115,9 +115,15 @@ public class Consumer {
                     """;
 
                 Object result = batchJob.eval(script, List.of(heartbeatKey, bookmarkKey), batch);
-                // if you're a zombie, quit
+                // if you're a zombie, restart
                 if (Long.valueOf(0).equals(result)) {
-                    System.exit(1);
+                    refresher.interrupt();
+                    heartbeat.close();
+                    batchJob.close();
+                    reader.close();
+
+                    main(args);
+                    return;
                 }
 
                 // reset the aggregates and the time since last batch
