@@ -17,7 +17,7 @@ Requires Java 21, Maven, Redis 8+, and Kafka 4.3.1 with its path set in `.env`.
 
 `bash start.sh` and `bash start-cms.sh` to start,
 
-send in clicks to kafka via command line as "day":"2026-11-24,“hour”:”7”,"minute":"42","videoId":"v317"
+send in clicks to kafka via command line as {"day":"2026-11-24,“hour”:”7”,"minute":"42","videoId":"v317"}
 
 
 
