@@ -1,6 +1,6 @@
 # top_k
 
-Real-time top K most-clicked videos over the last hour, using Kafka and Redis, with every click counted exactly once.
+Real-time exactly-once top-K most-clicked videos over the last hour, using Kafka and Redis.
 
 ## How it works
 
