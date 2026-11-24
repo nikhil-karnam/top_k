@@ -109,6 +109,13 @@ public class Consumer {
                         local count = ARGV[i + 2]
                         redis.call('ZINCRBY', minute, count, video)
                         redis.call('EXPIRE', minute, 3600, 'NX')
+
+                        local sketch = 'cms:' .. minute
+                        if redis.call('EXISTS', sketch) == 0 then
+                            redis.call('CMS.INITBYDIM', sketch, 2000, 5)
+                            redis.call('EXPIRE', sketch, 3600)
+                        end
+                        redis.call('CMS.INCRBY', sketch, video, count)
                     end
 
                     return 1
