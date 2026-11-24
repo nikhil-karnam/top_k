@@ -18,7 +18,7 @@ Requires Java 21, Maven, Redis 7+, and Kafka 4.3.1 installed in `~/kafka_2.13-4.
 
 `bash start.sh` to start,
 
-`java -cp "target/classes:$(cat data/classpath.txt)" com.helloworld.Stats` to report top-k, and
+`java -cp "target/classes:$(cat data/classpath.txt)" com.helloworld.Stats` to report top-k,
 
 `bash stop.sh` to stop. Folders are not deleted after stopping.
 
