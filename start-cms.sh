@@ -1,6 +1,5 @@
 #!/bin/bash
 source .env
-KAFKA=~/kafka_2.13-4.3.1
 
 # create the count-min kafka folder
 mkdir -p data/kafka-cms
