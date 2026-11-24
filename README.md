@@ -24,4 +24,4 @@ java -cp "target/classes:$(cat data/classpath.txt)" com.helloworld.Stats
 
 ## Tested
 
-Froze every main worker mid-stream: the backups took over, the old mains stopped themselves, and the counts came out exact.
+Froze every main worker mid-stream: the backups took over, the old mains unfroze and ended up restarted themselves, and the counts came out exact.
