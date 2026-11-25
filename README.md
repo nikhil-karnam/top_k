@@ -11,7 +11,15 @@ Real-time, exact, exactly-once, fault-tolerant, top-k clicked videos over the la
 - In Redis, each key is a minute and the value contains a sorted set with video ID and count for that minute. The minute key expires after an hour of initially being set. `Stats` aggregates the keys and values for the last 60 minutes and prints the top-k for the last hour.
 - For the count-min version, Redis goes through a batch's buckets and for each one, adds it to the sketch, retrieves the count estimate, adds it to a separate top-100 sorted set for that minute, and evicts video #101. Calculating the top-k aggregates these sorted sets. There is a problem: A video that happened to make #100 in a single minute but is absent in other minutes will be present in the aggregated list. But a video that made #101 for every minute will not be present in the aggregated list despite having 60x more clicks than the other video. For a top-10 report, holding 90 extra spots reduces this problem. For a top-100 report, you may want to increase the size of the sorted set.
 
-## Run
+## Results
+
+Froze every main worker mid-stream: the backups took over, the old mains unfroze and ended up restarted themselves, and the counts came out exact.
+
+Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 clicks, 300 clicks, ... 1000 clicks: count-min achieved 93.4% accuracy for the top 10 videos (1 - total extra clicks / total clicks), 97.9% less memory for the whole minute, and perfect top-10 ranking.
+
+Batching got through an average of 124,397 clicks per second versus 6,489 for one write per click = ~19x faster.
+
+## Setup and Running
 
 Requires Java 21, Maven, Redis 8+, and Kafka 4.3.1 with its path set in `.env`.
 
@@ -23,10 +31,4 @@ send in clicks to kafka via command line as json (eg: {"day":"2026-11-24,“hour
 
 `bash stop.sh` and `bash stop-cms.sh` to stop. Folders are not deleted after stopping.
 
-## Tested
 
-Froze every main worker mid-stream: the backups took over, the old mains unfroze and ended up restarted themselves, and the counts came out exact.
-
-Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 clicks, 300 clicks, ... 1000 clicks: count-min achieved 93.4% accuracy for the top 10 videos (1 - total extra clicks / total clicks), 97.9% less memory for the whole minute, and perfect top-10 ranking.
-
-Batching got through an average of 124,397 clicks per second versus 6,489 for one write per click = ~19x faster.
