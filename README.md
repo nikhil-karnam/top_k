@@ -19,7 +19,7 @@ Across one minute, 100K different videos, and 10 videos with 100 clicks, 200 cli
 
 Batching got through an average of 124,397 clicks per second versus 6,489 for one write per click = ~19x faster.
 
-## Setup and Running
+## To Setup and Run
 
 Requires Java 21, Maven, Redis 8+, and Kafka 4.3.1 with its path set in `.env`.
 
