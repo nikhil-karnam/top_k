@@ -1,6 +1,6 @@
 Real-time, exact, exactly-once, fault-tolerant, top-k clicked videos over the last hour (rolling window), using Kafka and Redis.
 
-## How it works
+## How It Works
 
 - Clicks go into a Kafka topic split into partitions (number of partitions is set in `.env`).
 - Each partition has a main worker and a backup. The workers race to claim the partition, and whoever wins claims a lease in Redis for the partition (distributed lock).
